@@ -25,10 +25,10 @@ app.use(cors(corsOptions));
 app.use('/api', userRoutes);
 app.use('/api', notificationLogRoutes); 
 
-// All other routes should serve the Angular app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/dist/client/index.html'));
-});
+// // All other routes should serve the Angular app
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '/client/dist/client/index.html'));
+// });
 
 const PORT = process.env.PORT;
 
