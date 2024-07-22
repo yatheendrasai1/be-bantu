@@ -15,12 +15,26 @@ app.use(express.json());
 // Serve static files from the Angular app
 app.use(express.static(path.join(__dirname, 'client/dist/client')));
 
+const allowedOrigins = ['https://bantu-listen.vercel.app'];
+
 const corsOptions = {
-    origin: 'https://bantu-listen.vercel.app', // Allow requests from localhost:4200
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  };
-  
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
 app.use(cors(corsOptions));
+
+
+// const corsOptions = {
+//     origin: 'https://bantu-listen.vercel.app', // Allow requests from localhost:4200
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+//   };
+  
 
 // Add headers before the routes are defined
 app.use(function (req, res, next) {
