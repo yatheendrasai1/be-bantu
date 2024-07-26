@@ -6,6 +6,13 @@ const notificationLogRoutes = require('./routes/notificationLogRoutes');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+const logger = require('./logger');
+
+// Log messages
+logger.info('This is an info message');
+logger.warn('This is a warning message');
+logger.error('This is an error message');
+
 dotenv.config();
 connectDB();
 
@@ -19,6 +26,7 @@ const allowedOrigins = ['https://bantu-listen.vercel.app'];
 
 const corsOptions = {
   origin: (origin, callback) => {
+    logger.error(`%% ~ origin: ${origin}`)
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
