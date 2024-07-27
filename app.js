@@ -22,7 +22,7 @@ app.use(express.json());
 // Serve static files from the Angular app
 app.use(express.static(path.join(__dirname, 'client/dist/client')));
 
-const allowedOrigins = ['https://bantu-listen.vercel.app'];
+const allowedOrigins = ['https://bantu-listen.vercel.app','http://localhost:3001'];
 
 const corsOptions = {
   origin: (origin, callback) => {
