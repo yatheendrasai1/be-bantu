@@ -3,30 +3,26 @@ const path = require('path');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const notificationLogRoutes = require('./routes/notificationLogRoutes');
+const authRoutes = require('./routes/auth');
+const authMiddleware = require('./middlewares/auth');
+const internalAuthMiddleware = require('./middlewares/internal');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser')
 const cors = require('cors');
-
 const logger = require('./logger');
-
-// Log messages
-logger.info('This is an info message');
-logger.warn('This is a warning message');
-logger.error('This is an error message');
 
 dotenv.config();
 connectDB();
 
 const app = express();
 app.use(express.json());
+app.use(bodyParser.json());
 
-// Serve static files from the Angular app
-app.use(express.static(path.join(__dirname, 'client/dist/client')));
-
-const allowedOrigins = ['https://bantu-listen.vercel.app','http://localhost:3001'];
+const allowedOrigins = ['https://bantu-listen.vercel.app','http://localhost:3001', 'http://localhost:4200'];
 
 const corsOptions = {
   origin: (origin, callback) => {
-    logger.error(`%% ~ origin: ${origin}`)
+    logger.info(`%% ~ origin: ${origin}`)
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -41,13 +37,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
+app.use('/api/v1', authMiddleware, notificationLogRoutes);
+app.use('/api/internal', internalAuthMiddleware, notificationLogRoutes);
 app.use('/api', userRoutes);
-app.use('/api', notificationLogRoutes); 
-
-// // All other routes should serve the Angular app
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '/client/dist/client/index.html'));
-// });
+app.use('/api/auth', authRoutes);
+app.get('/api/protected', authMiddleware, (req, res) => {
+  res.send({ message: 'This is a protected route' });
+});
 
 const PORT = process.env.PORT;
 

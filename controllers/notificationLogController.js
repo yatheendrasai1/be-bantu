@@ -12,13 +12,11 @@ const getNotificationLogs = async (req, res) => {
 
 const createNotificationLogs = async (req, res) => {
     try {
-        let {title, text} = req?.body?.log;
-        if(title || text){
+        let log = req?.body?.log;
+        if(log?.title || log?.text){
             let logObject = {
-                log:{
-                    title, text,
-                    createdOn : new Date()
-                }
+                log:log,
+                createdOn : new Date()
             }
             const logs = await NotificationLog.create(logObject);
             res.sendStatus(200);
