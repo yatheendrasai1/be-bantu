@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
 
     const isMatch = await account.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).send({ error: 'Invalid email or password' });
+      return res.status(401).send({ error: 'Invalid password' });
     }
 
     const token = jwt.sign({ accountId: account._id }, JWT_SECRET, { expiresIn: '1h' });

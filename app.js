@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const notificationLogRoutes = require('./routes/notificationLogRoutes');
 const authRoutes = require('./routes/auth');
+const workLogRoutes = require('./routes/workLogRoutes.js');
 const authMiddleware = require('./middlewares/auth');
 const internalAuthMiddleware = require('./middlewares/internal');
 const dotenv = require('dotenv');
@@ -41,6 +42,7 @@ app.use('/api/v1', authMiddleware, notificationLogRoutes);
 app.use('/api/internal', internalAuthMiddleware, notificationLogRoutes);
 app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use("/api/public", internalAuthMiddleware, workLogRoutes)
 app.get('/api/protected', authMiddleware, (req, res) => {
   res.send({ message: 'This is a protected route' });
 });

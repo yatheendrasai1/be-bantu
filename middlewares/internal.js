@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'f5bc4665-c0b4-0k2k-20bi-5d1445425d5b'; // Use the same secret key
+const JWT_SECRET = process.env.INTERNAL_API_KEY; // Use the same secret key
 
 module.exports = function (req, res, next) {
   const token = req.header('apiKey');
